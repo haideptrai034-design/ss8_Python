@@ -189,14 +189,14 @@ while True:
     try:
         choice = int(input("Nhập lựa chọn: "))
     except ValueError:
-        print("Lựa chọn không hợp lệ")
+        print("Lựa chọn không hợp lệ. Vui lòng nhập số từ 1 đến 5.")
         continue
 
     match choice:
 
-        # =====================
+        # ==================================
         # CHỨC NĂNG 1
-        # =====================
+        # ==================================
         case 1:
 
             sender_name = input("Tên người gửi: ")
@@ -216,19 +216,29 @@ while True:
                 "Tên người nhận": receiver_name,
                 "SĐT người nhận": receiver_phone,
                 "Địa chỉ giao hàng": delivery_address,
-                "Ghi chú giao hàng": note
+                "Ghi chú": note
             }
 
             has_error = False
 
             for field_name, value in fields.items():
                 if value.strip() == "":
-                    print(f"{field_name} không được bỏ trống")
+                    print(f"{field_name} không được để trống")
                     has_error = True
 
             if has_error:
                 continue
 
+            # Kiểm tra số điện thoại
+            if not sender_phone.isdigit() or len(sender_phone) != 10:
+                print("SĐT người gửi phải gồm đúng 10 chữ số")
+                continue
+
+            if not receiver_phone.isdigit() or len(receiver_phone) != 10:
+                print("SĐT người nhận phải gồm đúng 10 chữ số")
+                continue
+
+            # Chuẩn hóa dữ liệu
             sender_name = sender_name.strip().title()
             receiver_name = receiver_name.strip().title()
 
@@ -237,18 +247,18 @@ while True:
 
             note = note.strip()
 
-            print("\n===== BÁO CÁO =====")
+            print("\n===== BÁO CÁO THÔNG TIN =====")
 
-            print("Tên người gửi:", sender_name)
-            print("Tên người nhận:", receiver_name)
+            print(f"Tên người gửi: {sender_name}")
+            print(f"Tên người nhận: {receiver_name}")
 
-            print("Địa chỉ lấy hàng:", pickup_address)
-            print("Địa chỉ giao hàng:", delivery_address)
+            print(f"\nĐịa chỉ lấy hàng: {pickup_address}")
+            print(f"Địa chỉ giao hàng: {delivery_address}")
 
-            print("Ghi chú:", note)
+            print(f"\nGhi chú: {note}")
 
-            print("Độ dài ghi chú:", len(note))
-            print("Số lượng từ:", len(note.split()))
+            print(f"\nĐộ dài ghi chú: {len(note)}")
+            print(f"Số từ trong ghi chú: {len(note.split())}")
 
             print("\nGhi chú chữ thường:")
             print(note.lower())
@@ -256,50 +266,34 @@ while True:
             print("\nGhi chú chữ hoa:")
             print(note.upper())
 
-        # =====================
+        # ==================================
         # CHỨC NĂNG 2
-        # =====================
+        # ==================================
         case 2:
 
-            order_code = input(
-                "Nhập mã đơn hàng: "
-            )
+            order_code = input("Nhập mã đơn hàng: ").strip()
 
-            if order_code.strip() == "":
-                print("Mã đơn hàng không được bỏ trống")
+            if order_code == "":
+                print("Mã đơn hàng không được để trống")
                 continue
 
             print("Mã ban đầu:", order_code)
 
-            order_code = order_code.strip()
             order_code = order_code.upper()
+            order_code = order_code.replace(" ", "-")
 
-            order_code = order_code.replace(
-                " ",
-                "-"
-            )
+            if not order_code.startswith("GRAB-"):
+                order_code = "GRAB-" + order_code
 
-            if not order_code.startswith(
-                "GRAB-"
-            ):
-                order_code = (
-                    "GRAB-" + order_code
-                )
+            print("Mã sau chuẩn hóa:", order_code)
 
-            print(
-                "Mã sau chuẩn hóa:",
-                order_code
-            )
-
-        # =====================
+        # ==================================
         # CHỨC NĂNG 3
-        # =====================
+        # ==================================
         case 3:
 
             if sender_phone == "" or receiver_phone == "":
-                print(
-                    "Chưa có dữ liệu số điện thoại"
-                )
+                print("Chưa có dữ liệu số điện thoại")
                 continue
 
             phones = [
@@ -310,49 +304,36 @@ while True:
             for owner, phone in phones:
 
                 if not phone.isdigit():
-                    print(
-                        f"Số điện thoại {owner} không hợp lệ"
-                    )
+                    print(f"SĐT {owner} không hợp lệ")
                     continue
 
                 if len(phone) != 10:
-                    print(
-                        f"Số điện thoại {owner} không hợp lệ: Số điện thoại phải có đúng 10 ký tự"
-                    )
+                    print(f"SĐT {owner} phải gồm đúng 10 chữ số")
                     continue
 
-                hidden_phone = (
-                    phone[:3]
-                    + "*" * 5
-                    + phone[-2:]
-                )
+                hidden_phone = phone[:3] + "*" * 5 + phone[-2:]
 
-                print(
-                    f"SĐT {owner}:",
-                    hidden_phone
-                )
+                print(f"SĐT {owner}: {hidden_phone}")
 
-        # =====================
+        # ==================================
         # CHỨC NĂNG 4
-        # =====================
+        # ==================================
         case 4:
 
             if note == "":
-                print(
-                    "Chưa có ghi chú giao hàng để tìm kiếm"
-                )
+                print("Chưa có ghi chú để tìm kiếm")
                 continue
 
-            old_keyword = input(
-                "Từ khóa cần tìm: "
-            )
+            old_keyword = input("Từ khóa cần tìm: ").strip()
 
-            new_keyword = input(
-                "Từ khóa thay thế: "
-            )
+            if old_keyword == "":
+                print("Từ khóa cần tìm không được để trống")
+                continue
 
-            count = note.count(
-                old_keyword
+            new_keyword = input("Từ khóa thay thế: ").strip()
+
+            count = note.lower().count(
+                old_keyword.lower()
             )
 
             if count > 0:
@@ -362,33 +343,23 @@ while True:
                     new_keyword
                 )
 
-                print(
-                    "\nSố lần xuất hiện:",
-                    count
-                )
+                print(f"\nSố lần xuất hiện: {count}")
 
-                print(
-                    "\nGhi chú sau khi thay thế:"
-                )
-
+                print("\nGhi chú mới:")
                 print(note)
 
             else:
-                print(
-                    "Không tìm thấy từ khóa trong ghi chú."
-                )
+                print("Không tìm thấy từ khóa")
 
-        # =====================
+        # ==================================
         # CHỨC NĂNG 5
-        # =====================
+        # ==================================
         case 5:
-            print("Thoát chương trình")
+            print("Thoát chương trình...")
             break
 
-        # =====================
-        # MENU SAI
-        # =====================
+        # ==================================
+        # MENU KHÔNG HỢP LỆ
+        # ==================================
         case _:
-            print(
-                "Lựa chọn không hợp lệ. Vui lòng chọn từ 1 đến 5."
-            )
+            print("Lựa chọn không hợp lệ. Vui lòng nhập từ 1 đến 5.")
