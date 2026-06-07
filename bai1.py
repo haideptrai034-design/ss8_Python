@@ -173,68 +173,122 @@ Lặp vô hạn
 2. SOURCE CODE HOÀN CHỈNH
 """
 
+username = ""
+title = ""
+description = ""
+hashtags = []
+
 while True:
-    print("+==========================================+")
-    print("    hệ thống quản lý nội dung tiktok    ")
-    print("1. Nhập và phân tích thông tin vide0")
-    print("2. chuẩn hóa tên tài tài khoản")
-    print("3. kiểm tra hagstah hợp lệ")
-    print("4. tìm kiếm và thay thế từ khóa")
+    print("\n+==========================================+")
+    print("      HỆ THỐNG QUẢN LÝ NỘI DUNG TIKTOK")
+    print("1. Nhập và phân tích thông tin video")
+    print("2. Chuẩn hóa tên tài khoản")
+    print("3. Kiểm tra hashtag hợp lệ")
+    print("4. Tìm kiếm và thay thế từ khóa")
     print("5. Thoát chương trình")
     print("+==========================================+")
 
-    choice = int(input(">Mời bạn chọn chức năng (1-5): "))
+    try:
+        choice = int(input("Mời bạn chọn chức năng (1-5): "))
+    except:
+        print("Vui lòng nhập số từ 1-5!")
+        continue
 
-    match (choice):
+    match choice:
         case 1:
-            print("Nhập và phân tích video")
-            user_name = input("Nhập tên tài khoản: ")
+            print("\n===== NHẬP THÔNG TIN VIDEO =====")
+
+            username = input("Nhập tên tài khoản: ")
             title = input("Nhập tiêu đề video: ")
-            descripstion = input("Nhập mô tả video: ")
-            list_hashtag = input("Nhập danh sách hasgtash (cách nhau dấu ,): ")
-            print("đã qua xử lí")
-            print(f"Tên tài khoản: {user_name.strip}")
-            print(f"Tiêu đề video {title.title().strip()}")
-            print(f"Mô tả {descripstion.strip()}")
-            print(f"Độ dài mô tả {len(descripstion)}")
-            count_space = descripstion.count(" ") + 1
-            print(f"Số lượng từ trong mô tả: {count_space}")
-            listhasgtag_ = list_hashtag.split(",")
-            new_listhasgtag = "".join(listhasgtag_)
-            print(f"Danh sách hasgtag: {new_listhasgtag}")
-            cuont_hasgtag = len(listhasgtag_)
-            print(f"Số lượng hasgtag: {cuont_hasgtag}")
-            print(f"Mô tả video thành thường {descripstion.lower()}")
-            print(f"Mô tả video thành hoa {descripstion.upper()}")
+            description = input("Nhập mô tả video: ")
+            hashtags_input = input("Nhập hashtag (cách nhau bởi dấu ,): ")
+
+            # Xử lý dữ liệu
+            username = username.strip()
+            title = title.strip().title()
+            description = description.strip()
+
+            hashtags = hashtags_input.split(",")
+
+            print("\n===== THÔNG TIN SAU XỬ LÝ =====")
+            print(f"Tên tài khoản: {username}")
+            print(f"Tiêu đề: {title}")
+            print(f"Mô tả: {description}")
+
+            print(f"\nĐộ dài mô tả: {len(description)}")
+            print(f"Số từ: {len(description.split())}")
+
+            print("\nHashtag:")
+            for tag in hashtags:
+                print(tag.strip())
+
+            print(f"\nSố lượng hashtag: {len(hashtags)}")
+
+            print("\nMô tả viết thường:")
+            print(description.lower())
+
+            print("\nMô tả viết hoa:")
+            print(description.upper())
+
         case 2:
-            print(f"Mô tả trước khi chuyển hóa: {user_name}")
-            print(f"tên tài khoản sau khi chuyển hóa {"@" + user_name.lower()}")
+            if username == "":
+                print("Bạn chưa nhập dữ liệu video!")
+            else:
+                print(f"Tên tài khoản sau chuẩn hóa: @{username.lower()}")
 
         case 3:
-            hashtag = input("Nhập hashtag: ")
-            if (hashtag == ""):
-                print("Không được rỗng")
-            elif (not hashtag.startswith("#")):
-                print("Phải bắt đầu bằng dấu #")
-            elif (" " in hashtag):
+            hashtag = input("Nhập hashtag cần kiểm tra: ").strip()
+
+            if hashtag == "":
+                print("Hashtag không được để trống!")
+
+            elif not hashtag.startswith("#"):
+                print("Hashtag phải bắt đầu bằng dấu #")
+
+            elif " " in hashtag:
                 print("Hashtag không được chứa khoảng trắng")
-            elif (len(hashtag) < 2):
-                print("phải chứa tối thiểu 2 ký tự")
+
+            elif len(hashtag) < 2:
+                print("Hashtag phải có ít nhất 2 ký tự")
+
             else:
-                print("Hợp lệ")
-                list_hashtag = list_hashtag + hashtag
-                print(f'Danh sách hashtag mới: {list_hashtag}')
+                noi_dung = hashtag[1:]
+
+                if noi_dung.replace("_", "").isalnum():
+                    print("Hashtag hợp lệ")
+
+                    hashtags.append(hashtag)
+
+                    print("Đã thêm vào danh sách hashtag")
+                else:
+                    print("Hashtag không hợp lệ")
+
         case 4:
-            find_word = print('Nhập từ khóa cần tìm: ')
-            count_word = descripstion.count(find_word)
-            if(count_word > 0):
-               descripstion=  descripstion.replace(find_word,"từ khóa mới")
-               print(f"{descripstion}")
-               print("só lần xuất hiện từ khóa: {count_word}")
+            if description == "":
+                print("Bạn chưa nhập mô tả!")
             else:
-                print("Từ khóa không tìm thấy")
+                find_word = input("Nhập từ khóa cần tìm: ")
+                replace_word = input("Nhập từ khóa thay thế: ")
+
+                count_word = description.lower().count(find_word.lower())
+
+                if count_word > 0:
+                    description = description.replace(
+                        find_word,
+                        replace_word
+                    )
+
+                    print(f"\nSố lần xuất hiện: {count_word}")
+
+                    print("\nMô tả mới:")
+                    print(description)
+
+                else:
+                    print("Không tìm thấy từ khóa!")
+
         case 5:
-            print("Thoát chương trình")
+            print("Thoát chương trình!")
             break
+
         case _:
-            print("Lựa chọn không hợp lệ:")
+            print("Lựa chọn không hợp lệ!")
